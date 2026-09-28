@@ -1,8 +1,9 @@
+# UTC. Hourly public schedule. Private repositories are not named in this file.
 name: sync-upstreams
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "23 * * * *"
   workflow_dispatch:
 
 permissions:

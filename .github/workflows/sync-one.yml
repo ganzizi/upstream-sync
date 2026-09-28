@@ -1,0 +1,78 @@
+# Called by a schedule group. This file has no schedule of its own.
+name: sync-one
+
+on:
+  workflow_call:
+    inputs:
+      git_ref:
+        description: Branch to check out on the private repository
+        required: true
+        type: string
+      upstream_slug:
+        description: Public upstream owner/name
+        required: true
+        type: string
+      upstream_branch:
+        description: Branch to merge from the public upstream
+        required: true
+        type: string
+    secrets:
+      repository:
+        description: Private owner/name
+        required: true
+      deploy_key:
+        description: Write deploy key for the private repository
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout private fork
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.repository }}
+          ref: ${{ inputs.git_ref }}
+          ssh-key: ${{ secrets.deploy_key }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Merge public upstream
+        env:
+          EXPECTED_REPO: ${{ secrets.repository }}
+          UPSTREAM_SLUG: ${{ inputs.upstream_slug }}
+          UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
+        run: |
+          set -euo pipefail
+          origin="$(git remote get-url origin)"
+          case "$origin" in
+            *"$EXPECTED_REPO"*) ;;
+            *) echo "origin mismatch"; exit 1 ;;
+          esac
+          if ! git push --dry-run origin "HEAD:${UPSTREAM_BRANCH}" >"$RUNNER_TEMP/push-dry.txt" 2>&1; then
+            echo "push access failed"
+            grep -v -e 'github.com' -e 'git@' "$RUNNER_TEMP/push-dry.txt" || true
+            exit 1
+          fi
+          echo "push access ok"
+          bin="${RUNNER_TEMP}/bin"
+          mkdir -p "$bin"
+          cat > "$bin/gh" << 'EOF'
+          #!/bin/bash
+          if [ "${1:-}" = "issue" ] && [ "${2:-}" = "list" ]; then
+            printf '%s\n' '[]'
+            exit 0
+          fi
+          if [ "${1:-}" = "issue" ]; then
+            exit 0
+          fi
+          echo "unexpected gh command" >&2
+          exit 1
+          EOF
+          chmod +x "$bin/gh"
+          export PATH="$bin:$PATH"
+          bash .github/sync-upstream.sh

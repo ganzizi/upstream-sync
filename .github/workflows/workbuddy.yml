@@ -1,0 +1,35 @@
+# UTC. One schedule group. Private repository names stay in Actions secrets.
+name: workbuddy
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync-workbuddy
+  cancel-in-progress: false
+
+jobs:
+  manager:
+    uses: ./.github/workflows/sync-one.yml
+    secrets:
+      repository: ${{ secrets.MANAGER_REPOSITORY }}
+      deploy_key: ${{ secrets.MANAGER_DEPLOY_KEY }}
+    with:
+      git_ref: main
+      upstream_slug: ithtelab/workbuddy-manager
+      upstream_branch: main
+
+  api:
+    uses: ./.github/workflows/sync-one.yml
+    secrets:
+      repository: ${{ secrets.API_REPOSITORY }}
+      deploy_key: ${{ secrets.API_DEPLOY_KEY }}
+    with:
+      git_ref: master
+      upstream_slug: HanawaBanana/workbuddy2api
+      upstream_branch: master

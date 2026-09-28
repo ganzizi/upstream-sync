@@ -1,0 +1,66 @@
+# Moves ghcr-build to the private default branch. No image is built here.
+name: point-one
+
+on:
+  workflow_call:
+    inputs:
+      git_ref:
+        description: Branch to check out on the private repository
+        required: true
+        type: string
+    secrets:
+      repository:
+        description: Private owner/name
+        required: true
+      deploy_key:
+        description: Write deploy key for the private repository
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  point:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout private repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.repository }}
+          ref: ${{ inputs.git_ref }}
+          ssh-key: ${{ secrets.deploy_key }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Point ghcr-build at this commit
+        env:
+          EXPECTED_REPO: ${{ secrets.repository }}
+        run: |
+          set -euo pipefail
+          origin="$(git remote get-url origin)"
+          case "$origin" in
+            *"$EXPECTED_REPO"*) ;;
+            *) echo "origin mismatch"; exit 1 ;;
+          esac
+          sha="$(git rev-parse HEAD)"
+          remote="$(git ls-remote origin refs/heads/ghcr-build)"
+          current="$(printf '%s\n' "$remote" | awk 'NR==1 { print $1 }')"
+          if [ "$current" = "$sha" ]; then
+            echo "ghcr-build already points at this commit"
+            exit 0
+          fi
+          if [ -n "$current" ]; then
+            if ! git cat-file -e "${current}^{commit}" 2>/dev/null; then
+              git fetch --no-tags origin refs/heads/ghcr-build >"$RUNNER_TEMP/fetch-ghcr.txt" 2>&1 || true
+            fi
+            if ! git merge-base --is-ancestor "$current" "$sha"; then
+              echo "ghcr-build is not an ancestor of this commit; refusing to force-push"
+              exit 1
+            fi
+          fi
+          if ! git push origin "${sha}:refs/heads/ghcr-build" >"$RUNNER_TEMP/push-ghcr.txt" 2>&1; then
+            echo "push access failed"
+            exit 1
+          fi
+          echo "pointed ghcr-build"

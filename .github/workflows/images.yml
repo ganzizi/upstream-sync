@@ -1,0 +1,30 @@
+# Points private image builds once a day. Image minutes are spent in the private repositories.
+name: images
+
+on:
+  schedule:
+    - cron: '40 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync-images
+  cancel-in-progress: false
+
+jobs:
+  manager:
+    uses: ./.github/workflows/point-one.yml
+    with:
+      git_ref: main
+    secrets:
+      repository: ${{ secrets.MANAGER_REPOSITORY }}
+      deploy_key: ${{ secrets.MANAGER_DEPLOY_KEY }}
+  api:
+    uses: ./.github/workflows/point-one.yml
+    with:
+      git_ref: master
+    secrets:
+      repository: ${{ secrets.API_REPOSITORY }}
+      deploy_key: ${{ secrets.API_DEPLOY_KEY }}

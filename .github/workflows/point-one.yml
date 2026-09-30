@@ -46,21 +46,38 @@ jobs:
           sha="$(git rev-parse HEAD)"
           remote="$(git ls-remote origin refs/heads/ghcr-build)"
           current="$(printf '%s\n' "$remote" | awk 'NR==1 { print $1 }')"
+          moved=0
           if [ "$current" = "$sha" ]; then
             echo "ghcr-build already points at this commit"
-            exit 0
-          fi
-          if [ -n "$current" ]; then
-            if ! git cat-file -e "${current}^{commit}" 2>/dev/null; then
-              git fetch --no-tags origin refs/heads/ghcr-build >"$RUNNER_TEMP/fetch-ghcr.txt" 2>&1 || true
+          else
+            if [ -n "$current" ]; then
+              if ! git cat-file -e "${current}^{commit}" 2>/dev/null; then
+                git fetch --no-tags origin refs/heads/ghcr-build >"$RUNNER_TEMP/fetch-ghcr.txt" 2>&1 || true
+              fi
+              if ! git merge-base --is-ancestor "$current" "$sha"; then
+                echo "ghcr-build is not an ancestor of this commit; refusing to force-push"
+                exit 1
+              fi
             fi
-            if ! git merge-base --is-ancestor "$current" "$sha"; then
-              echo "ghcr-build is not an ancestor of this commit; refusing to force-push"
+            if ! git push origin "${sha}:refs/heads/ghcr-build" >"$RUNNER_TEMP/push-ghcr.txt" 2>&1; then
+              echo "push access failed"
               exit 1
             fi
+            echo "pointed ghcr-build"
+            moved=1
           fi
-          if ! git push origin "${sha}:refs/heads/ghcr-build" >"$RUNNER_TEMP/push-ghcr.txt" 2>&1; then
-            echo "push access failed"
+          if [ "$moved" -eq 1 ]; then
+            echo "image build will deliver this commit"
+            exit 0
+          fi
+          tag="deliver-$(date -u +%Y%m%d)"
+          if git ls-remote --exit-code origin "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "delivery already requested today"
+            exit 0
+          fi
+          git tag "$tag" "$sha"
+          if ! git push origin "refs/tags/${tag}" >"$RUNNER_TEMP/push-tag.txt" 2>&1; then
+            echo "delivery tag push failed"
             exit 1
           fi
-          echo "pointed ghcr-build"
+          echo "requested delivery"

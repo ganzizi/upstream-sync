@@ -70,11 +70,7 @@ jobs:
             echo "image build will deliver this commit"
             exit 0
           fi
-          tag="deliver-$(date -u +%Y%m%d)"
-          if git ls-remote --exit-code origin "refs/tags/${tag}" >/dev/null 2>&1; then
-            echo "delivery already requested today"
-            exit 0
-          fi
+          tag="deliver-$(date -u +%Y%m%d%H%M%S)"
           git tag "$tag" "$sha"
           if ! git push origin "refs/tags/${tag}" >"$RUNNER_TEMP/push-tag.txt" 2>&1; then
             echo "delivery tag push failed"

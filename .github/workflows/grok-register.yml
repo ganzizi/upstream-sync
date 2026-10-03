@@ -20,6 +20,6 @@ jobs:
       repository: ${{ secrets.GROK_REGISTER_REPOSITORY }}
       deploy_key: ${{ secrets.GROK_REGISTER_DEPLOY_KEY }}
     with:
-      git_ref: personal
+      git_ref: main
       upstream_slug: kaibush/grok-register
       upstream_branch: main

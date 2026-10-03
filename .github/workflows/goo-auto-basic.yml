@@ -1,0 +1,25 @@
+# UTC. One schedule group. Private repository names stay in Actions secrets.
+name: goo-auto-basic
+
+on:
+  schedule:
+    - cron: "37 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync-goo-auto-basic
+  cancel-in-progress: false
+
+jobs:
+  basic:
+    uses: ./.github/workflows/sync-one.yml
+    secrets:
+      repository: ${{ secrets.BASIC_REPOSITORY }}
+      deploy_key: ${{ secrets.BASIC_DEPLOY_KEY }}
+    with:
+      git_ref: main
+      upstream_slug: tiantianGPU/reg-factory
+      upstream_branch: main

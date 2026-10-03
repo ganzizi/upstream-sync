@@ -15,6 +15,7 @@
 3. 在对应分组的 workflow 里加一个 job，调用 `sync-one.yml`。不同产品新建一个 workflow 文件，定时就互不影响。
 
 同一组里的现有密钥不用改名。`workbuddy` 现在使用 `MANAGER_REPOSITORY`、`MANAGER_DEPLOY_KEY`、`API_REPOSITORY` 和 `API_DEPLOY_KEY`。
+`goo-auto-basic` 使用 `BASIC_REPOSITORY` 和 `BASIC_DEPLOY_KEY`，上游是 `tiantianGPU/reg-factory`。
 
 新的分组可以照下面这样写。仓库名和密钥名都是占位符：
 

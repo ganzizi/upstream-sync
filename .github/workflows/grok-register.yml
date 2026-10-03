@@ -1,0 +1,25 @@
+# UTC. One schedule group. Private repository names stay in Actions secrets.
+name: grok-register
+
+on:
+  schedule:
+    - cron: "47 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync-grok-register
+  cancel-in-progress: false
+
+jobs:
+  register:
+    uses: ./.github/workflows/sync-one.yml
+    secrets:
+      repository: ${{ secrets.GROK_REGISTER_REPOSITORY }}
+      deploy_key: ${{ secrets.GROK_REGISTER_DEPLOY_KEY }}
+    with:
+      git_ref: personal
+      upstream_slug: kaibush/grok-register
+      upstream_branch: main

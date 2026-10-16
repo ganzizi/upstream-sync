@@ -1,0 +1,25 @@
+# UTC. One schedule group. Private repository names stay in Actions secrets.
+name: goo-tool-wx
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync-goo-tool-wx
+  cancel-in-progress: false
+
+jobs:
+  wx:
+    uses: ./.github/workflows/sync-one.yml
+    secrets:
+      repository: ${{ secrets.GOO_TOOL_WX_REPOSITORY }}
+      deploy_key: ${{ secrets.GOO_TOOL_WX_DEPLOY_KEY }}
+    with:
+      git_ref: main
+      upstream_slug: Prometheus-first/helper
+      upstream_branch: main

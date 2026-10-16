@@ -17,6 +17,7 @@
 同一组里的现有密钥不用改名。`workbuddy` 现在使用 `MANAGER_REPOSITORY`、`MANAGER_DEPLOY_KEY`、`API_REPOSITORY` 和 `API_DEPLOY_KEY`。
 `goo-auto-basic` 使用 `BASIC_REPOSITORY` 和 `BASIC_DEPLOY_KEY`，上游是 `tiantianGPU/reg-factory`。
 `grok-register` 使用 `GROK_REGISTER_REPOSITORY` 和 `GROK_REGISTER_DEPLOY_KEY`，上游是 `kaibush/grok-register`。它的 `git_ref` 是 `main`。注册机主分支已经回到 v1.0.14 并保留成功率修复，上游合并进这条 main，不要再改到 `codex/upstream-upgrade`。
+`goo-tool-wx` 使用 `GOO_TOOL_WX_REPOSITORY` 和 `GOO_TOOL_WX_DEPLOY_KEY`，上游是 `Prometheus-first/helper` 的 `main`。
 
 新的分组可以照下面这样写。仓库名和密钥名都是占位符：
 

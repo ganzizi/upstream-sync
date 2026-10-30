@@ -1,10 +1,7 @@
-# Points private image builds once a day. Image minutes are spent in the private repositories.
+# 只留手动补点。每天的合并和打包在 workbuddy.yml，避免同一天再打包一次。
 name: images
 
 on:
-  schedule:
-    - cron: '40 18 * * *'
-    - cron: '50 6 * * *'
   workflow_dispatch:
 
 permissions:

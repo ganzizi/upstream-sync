@@ -22,7 +22,7 @@ jobs:
       deploy_key: ${{ secrets.GOO_PANEL2API_DEPLOY_KEY }}
     with:
       git_ref: main
-      upstream_slug: xu20060420fan-cell/workbuddy2api-trae-qoder-minimax-panel
+      upstream_slug: aiprofesserzhaofeng8-jpg/codearts2api-panel
       upstream_branch: main
 
   panel-image:

@@ -21,7 +21,7 @@
 | 05:27 | sub2api | 个人 fork 自己每天 01:40 合并并发布镜像 |
 | 07:00 | workbuddy | 本仓库每天 21:10 排一次合并和打包。GitHub 会晚点跑，服务器 07:00 再换容器。 |
 | 05:40 | grok2api | 个人 fork 自己每天 03:10 同步一次。服务器只 `docker pull`，然后 `up --no-build` |
-| 05:50 | chatgpt2api | 用的是上游镜像，不在这里打包 |
+| 05:50 | chatgpt2api | 本仓库每天 21:25 合并 yukkcat/chatgpt2api 并点一次镜像。服务器核对已投递镜像，不在机器上编译 |
 | 06:10 | antigravity | 用的是上游镜像，不在这里打包 |
 | 06:20 | resin | 用的是上游镜像，不在这里打包 |
 | 06:30 | aimilivpn | 没有对应的个人 fork 打包 |
@@ -43,6 +43,7 @@
 `goo-tool-wx` 使用 `GOO_TOOL_WX_REPOSITORY` 和 `GOO_TOOL_WX_DEPLOY_KEY`，上游是 `Prometheus-first/helper` 的 `main`。
 `goo-panel2api` 使用 `GOO_PANEL2API_REPOSITORY` 和 `GOO_PANEL2API_DEPLOY_KEY`，上游是 `aiprofesserzhaofeng8-jpg/codearts2api-panel` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译，再投递到服务器。
 `codearts2api-panel` 使用 `CODEARTS2API_PANEL_REPOSITORY` 和 `CODEARTS2API_PANEL_DEPLOY_KEY`，上游是 `qwe5283/codearts2api-panel` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译，再投递到服务器。
+`chatgpt2api` 使用 `CHATGPT2API_REPOSITORY` 和 `CHATGPT2API_DEPLOY_KEY`，上游是 `yukkcat/chatgpt2api` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译为 `linux/amd64`，再投递到服务器。
 
 新的分组可以照下面这样写。仓库名和密钥名都是占位符：
 

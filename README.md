@@ -28,7 +28,7 @@
 | 06:53 | goo-panel2api | 本仓库每天 02:40 合并并点一次镜像。服务器每小时第 53 分钟核对已投递镜像，不在机器上编译 |
 | 07:00 | codearts2api-panel | 本仓库每天 02:50 合并并点一次镜像。服务器每小时第 41 分钟核对已投递镜像，不在机器上编译 |
 
-没有排进早上拉取的仓库也是每天一次：`goo-tool-wx` 20:17，`goo-auto-basic` 20:37，`grok-register` 20:47。
+没有排进早上拉取的仓库也是每天一次：`goo-tool-wx` 20:17，`goo-auto-basic` 20:37，`grok-register` 20:47，`goo-register-hub` 20:57。
 
 ## 增加一个私人仓库
 
@@ -44,6 +44,8 @@
 `goo-panel2api` 使用 `GOO_PANEL2API_REPOSITORY` 和 `GOO_PANEL2API_DEPLOY_KEY`，上游是 `aiprofesserzhaofeng8-jpg/codearts2api-panel` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译，再投递到服务器。
 `codearts2api-panel` 使用 `CODEARTS2API_PANEL_REPOSITORY` 和 `CODEARTS2API_PANEL_DEPLOY_KEY`，上游是 `qwe5283/codearts2api-panel` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译，再投递到服务器。
 `chatgpt2api` 使用 `CHATGPT2API_REPOSITORY` 和 `CHATGPT2API_DEPLOY_KEY`，上游是 `yukkcat/chatgpt2api` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译为 `linux/amd64`，再投递到服务器。
+
+`goo-register-hub` 使用 `GOO_REGISTER_HUB_REPOSITORY` 和 `GOO_REGISTER_HUB_DEPLOY_KEY`，上游是 `waw666waw666/RegisterHub` 的 `main`。只合并，不打包。
 
 新的分组可以照下面这样写。仓库名和密钥名都是占位符：
 

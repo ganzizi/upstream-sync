@@ -1,0 +1,25 @@
+# 上海时间每天 20:57 合并一次。这组没有早上的服务器拉取，也不打包。
+name: goo-register-hub
+
+on:
+  schedule:
+    - cron: "57 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-sync-goo-register-hub
+  cancel-in-progress: false
+
+jobs:
+  register_hub:
+    uses: ./.github/workflows/sync-one.yml
+    secrets:
+      repository: ${{ secrets.GOO_REGISTER_HUB_REPOSITORY }}
+      deploy_key: ${{ secrets.GOO_REGISTER_HUB_DEPLOY_KEY }}
+    with:
+      git_ref: main
+      upstream_slug: waw666waw666/RegisterHub
+      upstream_branch: main

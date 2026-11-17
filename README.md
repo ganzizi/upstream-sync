@@ -25,8 +25,6 @@
 | 06:10 | antigravity | 用的是上游镜像，不在这里打包 |
 | 06:20 | resin | 用的是上游镜像，不在这里打包 |
 | 06:30 | aimilivpn | 没有对应的个人 fork 打包 |
-| 06:53 | goo-panel2api | 本仓库每天 02:40 合并并点一次镜像。服务器每小时第 53 分钟核对已投递镜像，不在机器上编译 |
-| 07:00 | codearts2api-panel | 本仓库每天 02:50 合并并点一次镜像。服务器每小时第 41 分钟核对已投递镜像，不在机器上编译 |
 
 没有排进早上拉取的仓库也是每天一次：`goo-tool-wx` 20:17，`goo-auto-basic` 20:37，`grok-register` 20:47，`goo-register-hub` 20:57。
 
@@ -41,8 +39,6 @@
 `goo-auto-basic` 使用 `BASIC_REPOSITORY` 和 `BASIC_DEPLOY_KEY`，上游是 `tiantianGPU/reg-factory`。
 `grok-register` 使用 `GROK_REGISTER_REPOSITORY` 和 `GROK_REGISTER_DEPLOY_KEY`，上游是 `kaibush/grok-register`。它的 `git_ref` 是 `main`。注册机主分支已经回到 v1.0.14 并保留成功率修复，上游合并进这条 main，不要再改到 `codex/upstream-upgrade`。
 `goo-tool-wx` 使用 `GOO_TOOL_WX_REPOSITORY` 和 `GOO_TOOL_WX_DEPLOY_KEY`，上游是 `Prometheus-first/helper` 的 `main`。
-`goo-panel2api` 使用 `GOO_PANEL2API_REPOSITORY` 和 `GOO_PANEL2API_DEPLOY_KEY`，上游是 `aiprofesserzhaofeng8-jpg/codearts2api-panel` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译，再投递到服务器。
-`codearts2api-panel` 使用 `CODEARTS2API_PANEL_REPOSITORY` 和 `CODEARTS2API_PANEL_DEPLOY_KEY`，上游是 `qwe5283/codearts2api-panel` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译，再投递到服务器。
 `chatgpt2api` 使用 `CHATGPT2API_REPOSITORY` 和 `CHATGPT2API_DEPLOY_KEY`，上游是 `yukkcat/chatgpt2api` 的 `main`。镜像由私人仓库在 `ghcr-build` 上编译为 `linux/amd64`，再投递到服务器。
 
 `goo-register-hub` 使用 `GOO_REGISTER_HUB_REPOSITORY` 和 `GOO_REGISTER_HUB_DEPLOY_KEY`，上游是 `waw666waw666/RegisterHub` 的 `main`。只合并，不打包。
